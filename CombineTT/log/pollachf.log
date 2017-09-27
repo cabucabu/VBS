@@ -1,0 +1,6 @@
+<WebCombineTTWindows>
+CombineTTWindows|10.235.6.200|pollachf|1/17/17 12:06:00|C1062798005|Major|ussdgw_Error rate of error code 0000999-[OLYMPUS] - CALL_SOAP_ERROR on USSD service Additional-*500A|Misc|YYYYYYY|USSD5_APP_4_CWDC_USSD_ERROR_500A_0000999|CombindTT|FAULT|null|USSD5_APP_4_CWDC|TT17-0068578|Unknow|USSD_Error_Rate_2101|0
+CombineTTWindows|10.235.6.200|pollachf|1/17/17 12:00:50|C1062796372|Major|2017-01-17,12:00:48 File space utilization is 83.28% (threshold >=80.00%)|Misc|YYYYYYY|dbacwd04b_/var|CombindTT|FAULT|null|dbacwd04b|TT17-0068578|Unknow|HighFilesystemUsage|0
+CombineTTWindows|10.235.6.200|pollachf|1/17/17 12:05:51|C1062797954|Critical|2017-01-17,12:05:48 Disk utilization is 92.61% (threshold >=90.00%)|Misc|YYYYYYY|dbacwd04b_64000/0xfa00/0x1a|CombindTT|FAULT|null|dbacwd04b|TT17-0068578|Unknow|DiskAbnormal|0
+CombineTTWindows|10.235.6.200|pollachf|1/17/17 12:05:56|C1062797989|Critical|ussdgw_Success rate on USSD service Additional-*500A is 88.7399%|Misc|YYYYYYY|USSD5_APP_4_CWDC_USSD_SUCCESS_500A|CombindTT|FAULT|null|USSD5_APP_4_CWDC|TT17-0068578|Unknow|USSD_Success_Rate_2100|0
+pollachf</WebCombineTTWindows>

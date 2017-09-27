@@ -1,0 +1,1 @@
+nuttanaa|1035298321|10/29/16 20:34:49|HW_3G2100_NodeB_26520|Critical|3RNCCMI1H_STWTM_2_SRN=81|26520 RF Unit TX Channel Gain Out of Range BTS3900, Board Type=AIRU, Input Power 0.1 dBFs=-240, Output Power 0.1 dBm=NULL|STWTM|3RNCCMI1H||3G2100HUAWEIFaultManager

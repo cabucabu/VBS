@@ -1,0 +1,1 @@
+prawitaa|1121552060|5/28/17 02:21:40|GatewayFault|Critical|INC100_BKK_CN3_GatewayFault|(28-05-17 02:21) Gateway start failed||CFMS-ADMIN||sdhINC100FaultManager

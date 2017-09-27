@@ -1,0 +1,1 @@
+prawitaa|1123961060|6/2/17 13:51:53|ArchiveNotUpdate|Critical|INC100_BKK_CN4_ArchiveNotUpdate|(02-06-17 13:51) Archive file last update 12:46 (now 13:51 delay 65 Min.) [INC100_BKK_CN4]||CFMS-ADMIN||sdhINC100FaultManager

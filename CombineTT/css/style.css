@@ -1,0 +1,109 @@
+#ClearTextBox { font-family:Verdana,arial; font-size:14pt; font-weight:bold; color:Gray; background-color:Transparent; border-top-width:0px; border-bottom-width:0px; border-right-width:0px; border-left-width:0px; } 
+#Content { font: 11px MS Sans Serif; text-align: justify; color: Black; font-family : Verdana; } 
+#Contents { font: 11px MS Sans Serif; color: Blue; font-family : Verdana; } 
+#menu_text { font-family : Verdana; font-size :12px; color : Blue; font-weight: bold; } 
+#messok { font-family : Verdana; font-size :18px; color: #00007D; font-weight: bold; font-weight: bold; display: block; } 
+#pages { font-family : Verdana; font-size :10px; color: #2C5498; font-weight: lighter; display: block; } 
+#powerby { font-family : Verdana; font-size :10px; color: #696969; } 
+#textarea { font-family : Verdana; font-size :12px; color: #191970; font-weight: lighter; display: block; } 
+#textareas { font-family : MS Sans Serif; font-size :10px; color: #191970;; font-weight: lighter; display: block; } 
+#textareathai { font-family : "MS Sans Serif"; font-size :14px; color: #191970; font-weight: lighter; display: block; } 
+#TextCopy { color: Gray; font-family: Verdana; font-weight: normal; font-size: 9px; } 
+#TextTable { color: #151515; font-family: MS Sans Serif; font-weight: normal; font-size: 8px; } 
+#titlebar { font-family : Verdana; font-size :12px; color: #1D1D1D; font-weight: lighter; font-weight: bold; display: block; } 
+#titlebarthai { font-family : "MS SystemEx"; font-size :14px; color: #696969; font-weight: lighter; font-weight: bold; display: block; } 
+#titlelogon { font-family : Verdana; font-size :12px; color: Navy; font-weight: lighter; font-weight: bold; display: block; } 
+#titles { font-family : Verdana; font-size :10px; color: #003A75; } 
+.Button { font : 10px MS Sans Serif; border-width: 1px; border-left-width: 1px; border-right-width: 1px; background-color: #C6C6C6; } 
+.ButtonC { font : 10px MS Sans Serif; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: Black; background-color: transparent; color:#0000FF; } 
+.mybuttonhome { font-family : Verdana; font-size: 10px; color: #330000; font-weight: bold; background-color: #7E7E4E; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: center; }
+.mybuttonhome1 { font-family : Verdana; font-size: 10px; color: #330000; font-weight: bold; background-color: #D6D688; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #7E7E4E; height:18px; text-align: center; }
+.myinputhome { font-family : Verdana; font-size: 10px; color: #330000; background-color: #DEDEBB; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: left; }
+.select { font-family: "MS Sans Serif"; font-size: 14px; color: #00008B; text-decoration: none; border: #333333; background-color: transparent; border-style: solid; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px } 
+body { 
+	scrollbar-face-color: #cccccc;
+	scrollbar-highlight-color: #FFFFFF;
+	scrollbar-3dlight-color: #000000;
+	scrollbar-shadow-color: #00000;
+	scrollbar-darkshadow-color: #000000;
+	scrollbar-track-color: #cccccc;
+	scrollbar-arrow-color: #FFFFFF;
+	} 
+table { font-size: 10px; font-family: "MS Sans Serif" } 
+
+.black {
+	font-family: "MS Sans Serif", Tahoma, sans-serif;
+	font-size: xx-small;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000000;
+}
+
+.buttonText { font-family : Tahoma, Arial, Helvetica, Sans Serif,Sans; font-size : 11px; color: #000000; CURSOR: hand; }
+
+a.barlink1 { font-family : "MS Sans Serif"; font-size : 12px; color: #000000; text-decoration: none }
+a.barlink1:visited { font-family : "MS Sans Serif"; font-size : 12px; color: #000000; text-decoration: none }
+a.barlink1:hover { font-family : "MS Sans Serif"; font-size : 12px; color: #6699CC;  text-decoration: underline }
+a.barlink1:active { font-family : "MS Sans Serif"; font-size : 12px; color: #6699CC;  text-decoration: underline }
+
+a.barlink2 { font-family : "MS Sans Serif"; font-size : 12px; color: #FFFFFF; text-decoration: none }
+a.barlink2:visited { font-family : "MS Sans Serif"; font-size : 12px; color: #FFFFFF; text-decoration: none }
+a.barlink2:hover { font-family : "MS Sans Serif"; font-size : 12px; color: #6699CC;  text-decoration: underline }
+a.barlink2:active { font-family : "MS Sans Serif"; font-size : 12px; color: #6699CC;  text-decoration: underline }
+
+a.barlink3 { font-family : "MS Sans Serif"; font-size : 12px; color: #000000; text-decoration: none }
+a.barlink3:visited { font-family : "MS Sans Serif"; font-size : 12px; color: #000000; text-decoration: none }
+a.barlink3:hover { font-family : "MS Sans Serif"; font-size : 12px; color: #FF6600;  text-decoration: none }
+a.barlink3:active { font-family : "MS Sans Serif"; font-size : 12px; color: #FF6600;  text-decoration: none }
+
+a.barlink4 { font-family : "MS Sans Serif"; font-size : 12px; color: #003366; text-decoration: underline }
+a.barlink4:visited { font-family : "MS Sans Serif"; font-size : 12px; color: #003366; text-decoration: underline }
+a.barlink4:hover { font-family : "MS Sans Serif"; font-size : 12px; color: #FF6600;  text-decoration: none }
+a.barlink4:active { font-family : "MS Sans Serif"; font-size : 12px; color: #FF6600;  text-decoration: none }
+
+.smallfont { font-family : "MS Sans Serif"; font-size : 12px; }
+.smallwhite { font-family : "MS Sans Serif"; font-size : 12px; color: #FFFFFF; }
+.smallred { font-family : "MS Sans Serif"; font-size : 12px; color: #FF0000; }
+.smallBlack { font-family : "MS Sans Serif"; font-size : 12px; color: #000000; }
+.smallred1 { font-family : "MS Sans Serif"; font-size : 12px; color: #FF0000; }
+.smallblack1 { font-family : "MS Sans Serif"; font-size : 14px; color: #000000; }
+.smallBlue { font-family : "MS Sans Serif"; font-size : 11px; color: #0000FF; }
+.smallOrange { font-family : "MS Sans Serif"; font-size : 11px; color: #FF6600; }
+.smallgreen { font-family : "MS Sans Serif"; font-size : 12px; color: #779525; }
+.Black1 { font-family : "MS Sans Serif"; font-size : 20px; color: #000000; font-weight:bold; }
+
+
+.titlered { font-family : "MS Sans Serif"; font-size : 14px; color: #FF0000; }
+.titleblue { font-family : "MS Sans Serif"; font-size : 14px; color: #003399; }
+.titlewhite { font-family : "MS Sans Serif"; font-size : 14px; color: #FFFFFF; }
+.titleorange { font-family : "MS Sans Serif"; font-size : 14px; color: #FF9933; }
+.titlegreen { font-family : "MS Sans Serif"; font-size : 14px; color: #006633; }
+.titlegreen { font-family : "MS Sans Serif"; font-size : 14px; color: #000000; }
+
+a.leftbar:link { color: #222200; text-decoration: none; }
+a.leftbar:visited { color: #222200; text-decoration: none; }
+a.leftbar:active { color: #666644; text-decoration: none; }
+a.leftbar:hover { color: #666644; text-decoration: none; }
+
+.system_table_text_header { font-family: "MS Sans Serif"; font-size: 10px; font-weight: bold; color: #FFFFFF; } 
+.system_table_text { font-family: "MS Sans Serif"; font-size: 10px; } 
+.system_button_normal { font-family : Verdana; font-size: 10px; color: #FFFFFF; font-weight: bold; background-color: #779525; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #779525; height:18px; text-align: center; }
+.system_button_120 { font-family : Verdana; font-size: 10px; color: #330000; font-weight: bold; background-color: #C6C677; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #7E7E4E; height:18px; width:120px; text-align: center; }
+.system_button_60 { font-family : Verdana; font-size: 10px; color: #330000; font-weight: bold; background-color: #C6C677; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #7E7E4E; height:18px; width:60px; text-align: center; }
+.system_button_80 { font-family : Verdana; font-size: 10px; color: #330000; font-weight: bold; background-color: #C6C677; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #7E7E4E; height:18px; width:80px; text-align: center; }
+.system_input_center { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #DEDEBB; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: center; }
+.system_input_left { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #BBD84C; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: left; }
+.disabledBox{ font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #F3E3F3; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: left; }
+
+.system_input_left2 { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #DEDEBB; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: left; }
+
+.system_input_left_login { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #DEDEBB; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; width:100px; text-align: left; }
+.system_input_right { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #DEDEBB; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: right; }
+.system_input_textarea { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #F3E3F3; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; text-align: left; }
+.system_select { font-family: "MS Sans Serif"; font-size: 10px; color: #000000; background-color: #F3E3F3; border-width: 1px; border-left-width: 1px; border-right-width: 1px; border-color: #FFFFDD; height:18px; text-align: left; }
+a.system_table_head_link { font-family: "MS Sans Serif"; font-size: 10px; color: #FFFFFF; font-weight: bold; text-decoration: none }
+a.system_table_head_link:visited { font-family: "MS Sans Serif"; font-size: 10px; color: #FFFFFF; font-weight: bold; text-decoration: none }
+a.system_table_head_link:hover { font-family: "MS Sans Serif"; font-size: 10px; color: #FF9900; font-weight: bold; text-decoration: none }
+a.system_table_head_link:active { font-family: "MS Sans Serif"; font-size: 10px; color: #FF9900; font-weight: bold; text-decoration: none }

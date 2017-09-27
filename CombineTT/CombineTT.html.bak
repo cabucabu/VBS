@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> ::: Combine TT ::: </TITLE>
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <!--META NAME="Generator" CONTENT="EditPlus"-->
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+ </HEAD>
+
+ <BODY>
+
+<form name="AutoTT">	
+	<div id="divCheckbox" style="display: none;"><input type="radio" name="TT" value="" disabled>Default Radio Button, Not Use</div>
+     <tr>
+          <td><table width="100%" border="0" align="center" cellpadding="0" cellspacing="1" >
+              <tr class="smallBlack">
+                <td width="3%" bgcolor="#669900"></td>
+                <td bgcolor="#669900" align="center"><strong>TT ID</strong></td>
+                <td bgcolor="#669900" align="center"><strong>JOB ID</strong></td>
+                <td bgcolor="#669900" align="center"><strong>Start Date</strong></td>
+                <td bgcolor="#669900" align="center"><strong>Finish Date</strong></td>
+                <td bgcolor="#669900" align="center"><strong>Piority</strong></td>
+                <td bgcolor="#669900" align="center"><strong>Status</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Date Action</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Title</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Site Access</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Site Affect</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Assign By</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Telephone</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Assign To</strong></td>
+				<td bgcolor="#669900" align="center"><strong>Telephone</strong></td>
+              </tr>
+			  <!-- ###### Deatils on table ####### bgcolor="#97B22D" --> 
+			  <tr class="smallGrey" bgcolor="#FF0000">
+                <td width="3%" bgcolor="#CCCCCC" align="center"><input type="radio" name="TT" checked value="TT14-670064|JB14-635447|10-NOV-14|rekung"></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>TT14-670064</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>JB14-635447</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>10-NOV-14</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>30-NOV-14</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>None</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>Accept</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>14-NOV-14</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET-Site survey for DWDM 80 Ch. 100G WSON Project. </strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET(BSC-RET2H,MSC-KKN1)</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET(BSC-RET3,MSC-KKN1),MRET(BSC-RET2H,MSC-KKN1</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>Nutdanai Chaleekrua</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>044276790, 0848241779</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>monchai kraikran</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>043-525161, 0818362054</strong></td>
+              </tr>
+			  <!--tr class="smallGrey" bgcolor="#FF0000">
+                <td width="3%" bgcolor="#CCCCCC" align="center"><input type="radio" name="TT" value="TT22-670064|JB14-635447|10-NOV-14|"></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>22TT14-670064</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>JB14-635447</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>10-NOV-14</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>30-NOV-14</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>None</strong></td>
+                <td bgcolor="#CCCCCC" align="center"><strong>Accept</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>14-NOV-14</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET-Site survey for DWDM 80 Ch. 100G WSON Project. </strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET(BSC-RET2H,MSC-KKN1)</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>MRET(BSC-RET3,MSC-KKN1),MRET(BSC-RET2H,MSC-KKN1</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>Nutdanai Chaleekrua</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>044276790, 0848241779</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>monchai kraikran</strong></td>
+				<td bgcolor="#CCCCCC" align="center"><strong>043-525161, 0818362054</strong></td>
+              </tr-->
+			  
+	
+		</table></td>
+	 </tr>
+</form>
+	 <!-- ######## Control Script ######### -->	 
+<FORM NAME="Form1">
+	<div align="left">
+   			  <INPUT TYPE="Button" NAME="Button1" VALUE="Submit" class="system_button_normal">
+			  <INPUT TYPE="Button" NAME="Button2" VALUE="Cancel" class="system_button_normal">	
+			  
+	</div>
+  <SCRIPT FOR="Button1" EVENT="onClick" LANGUAGE="VBScript">
+			Dim currentphase
+			Dim i
+			'MsgBox Document.AutoTT.TT.length
+
+'			for i = 1 to Document.AutoTT.TT.length - 1 
+'				if Document.AutoTT.TT(i).checked then
+'				MsgBox Document.AutoTT.TT(i).value
+'				End if
+'			next
+			For Each button in Document.AutoTT.TT
+				If button.Checked Then 
+					value = button.value
+					'MsgBox value
+					Dim wshShell
+					Set wshShell = CreateObject("WScript.Shell")
+					WshShell.Run "C:\CFMS\CombineTT\FindHostIP.vbs " & value,1,true
+					exit For
+				end If
+			Next
+  </SCRIPT>
+</FORM>
+
+
+ </BODY>
+</HTML>

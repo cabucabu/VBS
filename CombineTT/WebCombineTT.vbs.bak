@@ -1,0 +1,327 @@
+Option Explicit 
+Dim dbType, dbHost, dbPort, dbName, dbUser, dbPass, outputFile, email, subj, body, smtp, smtpPort, sqlstr, sqlfile, SITE, srcFile, HtmlFile
+Dim AlertFile, TT_ID, DelFileCommand, HeadingFile, EndingFile
+
+'##### Check parameters, functions ######
+'MsgBox WScript.Arguments(0)
+'MsgBox GetIPAddresses
+'MsgBox Split(WScript.Arguments(0),"|")(2)
+'MsgBox DateConversion(Split(WScript.Arguments(0),"|")(2))
+'WScript.Quit
+
+'#####################
+'### Configuration ###
+'#####################
+dbType = "oracle"             ' Valid values: "oracle", "sqlserver", "mysql"
+dbHost = "10.15.33.56"      ' Hostname of the database server
+dbPort = "1521"      ' Hostname of the database server
+dbName = "ttsprd"           ' Name of the database/SID
+dbUser = "tts"               ' Name of the user
+dbPass = "tts207wv"               ' Password of the above-named user
+srcFile = "C:\CFMS\CombineTT\" & Year(Now) & Month(Now) & Day(Now) & Hour(Now) & Minute(Now) & Second(Now)
+outputFile = srcFile & ".txt"      ' Path and file name of the output CSV file
+HtmlFile = srcFile & ".html"      ' HTML file
+AlertFile = srcFile & "_alert.txt"      'Writing alerts from right-click menu on Alert Navigator
+sqlstr = "select * from active_alertlog where object like 'WBB%'"  ' SQL statement you wish to execute
+sqlfile = "C:\CFMS\CombineTT\FindJOB.sql" '.SQL file '
+DelFileCommand = "C:\CFMS\CombineTT\del.bat" 'For removing file
+HeadingFile = "C:\CFMS\CombineTT\Header_Section.html"
+EndingFile = "C:\CFMS\CombineTT\Ending_Section.html"
+
+'#####################
+
+'###### Checking Site first #######
+Dim intAnswer
+SITE = Split(WScript.Arguments(0),"|")(7)
+if Split(WScript.Arguments(0),"|")(7) = "" then
+  intAnswer = Msgbox("Site name is empty, Do you want to fill in? (If not fill program will be closed)", vbYesNo, "Missing site")
+  If intAnswer = vbYes Then
+    'Msgbox "You answered yes."
+	SITE = InputBox("Enter site","site name")
+	If SITE = "" Then 
+		wscript.Quit
+	End If 
+  Else
+    'Msgbox "You answered no."
+	wscript.Quit
+  End If
+end If
+
+'######### Checking TT from alert ########
+if Split(WScript.Arguments(0),"|")(9) = "" Then
+	TT_ID = "Unknow"
+Else 
+	TT_ID = Split(WScript.Arguments(0),"|")(9)
+End If 
+
+
+
+'###### Writing alerts to file ########
+'IP|User|Date Update|C+AlertID|Severity|Description|Misc|YYYY|AMO|CombindTT|FAULT|Site|Col1|TT_FromWeb|TT_IDFromAlert|AlertName
+'"${time}|${ip}|${uname}|${adate}|C${alm}|${aser}|${desc}|${vendor}|${system}|${amo}|CombindTT|FAULT|${strsite}|${ext1}|${TTNo}|${ttid}|${aname}"
+Dim AlertShell, AlertStream, AlertFormat
+Set AlertShell = CreateObject("Scripting.FileSystemObject")
+Set AlertStream = AlertShell.CreateTextFile(AlertFile,true)
+	AlertFormat = Split(WScript.Arguments(0),"|")
+
+	AlertStream.WriteLine "WebCombineTT|" _
+	& GetIPAddresses & "|"_
+	& AlertFormat(0) & "|" _
+	& DateConversion(Split(WScript.Arguments(0),"|")(2)) & "|" _
+	& "C" & AlertFormat(1) & "|" _
+	& AlertFormat(4) & "|" _ 
+	& AlertFormat(6) & "|" _ 
+	& "Misc|" _
+	& "YYYY|" _
+	& AlertFormat(5) & "|" _ 
+	& "CombindTT|" _
+	& "FAULT|" _
+	& SITE & "|" _  
+	& AlertFormat(8) & " |" _ 
+	& "ZZZZ|" _ 
+	& TT_ID & "|" _ 
+	& AlertFormat(3) & "|" 
+	AlertStream.close
+	Set AlertStream = Nothing
+	Set AlertShell = Nothing 
+
+'WScript.Quit
+
+'############ Database Configuration ###########
+dim fso, fso2, conn, WshShell0, WshSysEnv0
+
+'Support THAI
+
+Set WshShell0 = CreateObject("WScript.Shell")
+Set WshSysEnv0 = WshShell0.Environment("PROCESS")
+WshSysEnv0.Item("NLS_LANG") = "THAI_THAILAND.TH8TISASCII"
+
+'Create filesystem object 
+set fso = CreateObject("Scripting.FileSystemObject")
+
+'Database connection info
+set Conn = CreateObject("ADODB.connection")
+Conn.ConnectionTimeout = 90
+Conn.CommandTimeout = 60
+if dbType = "oracle" then
+	'conn.open("Provider=MSDAORA;SERVER=" & dbHost & "User ID=" & dbUser & ";Password=" & dbPass & ";Data Source=" & dbName & ";Persist Security Info=True;")
+	'conn.open("DRIVER={Microsoft ODBC for Oracle};SERVER=" & dbHost & ";User Id=" & dbUser & ";Password=" & dbPass & ";Data Source=" & dbName & ";" )
+	conn.open("Driver={Microsoft ODBC for Oracle}; " & _
+         "CONNECTSTRING=(DESCRIPTION=" & _
+         "(ADDRESS=(PROTOCOL=TCP)" & _
+         "(HOST=" & dbHost &")(PORT=" & dbPort & "))" & _
+         "(CONNECT_DATA=(SERVICE_NAME=" & dbName & "))); uid=" & dbUser & ";pwd=" & dbPass & ";")
+
+elseif dbType = "sqlserver" then
+	conn.open("Driver={SQL Server};Server=" & dbHost & ";Database=" & dbName & ";Uid=" & dbUser & ";Pwd=" & dbPass & ";")
+elseif dbType = "mysql" then
+	conn.open("DRIVER={MySQL ODBC 3.51 Driver}; SERVER=" & dbHost & ";PORT=3306;DATABASE=" & dbName & "; UID=" & dbUser & "; PASSWORD=" & dbPass & "; OPTION=3")
+end if
+
+' Subprocedure to generate data.  Two parameters:
+'   1. fPath=where to create the file
+'   2. sqlstr=the database query
+sub MakeDataFile(fPath, sqlstr, sqlfile)
+	dim a,b, showList, intcount
+	set a = fso.createtextfile(fPath)
+	b = fso.OpenTextFile(sqlfile).ReadAll
+
+	If Len(SITE) > 5 then
+		b = Replace(b,"QQQQ%",SITE) 'Replace by Site variable
+	ElseIf Len(SITE) = 5 Then
+		b = Replace(b,"QQQQ",Mid(SITE,1,4))
+	Else
+		b = Replace(b,"QQQQ",SITE)
+	End If 
+	
+	set showList = conn.execute(b)
+
+	If showList.EOF Then
+		MsgBox "No JOB or TT containing on SLIM"
+		set fso = Nothing
+		conn.close
+		set conn = Nothing
+		Set WshShell0 = Nothing 
+		'Clear file
+		a.close
+		Call DelFile(outputFile)
+		Call DelFile(AlertFile)
+		wscript.Quit
+	End If
+	
+'	for intcount = 0 to showList.fields.count -1  'To write header
+'		if intcount <> showList.fields.count-1 then
+'			a.write """" & showList.fields(intcount).name & ""","
+'		else
+'			a.write """" & showList.fields(intcount).name & """"
+'		end if
+'	next
+'	a.writeline ""
+	
+	do while not showList.eof
+		'for intcount = 0 to showList.fields.count - 1
+			'a.write showList.fields(intcount).value & "|"
+			'a.write showList.fields(intcount).value
+		'next
+		
+		a.write showList.fields(0).value
+		'MsgBox showList.fields(0).value
+		a.writeline ""
+		showList.movenext
+	loop
+	showList.close
+	set showList = nothing
+
+    a.close
+	set a = Nothing
+	Set b = Nothing
+end sub
+
+' Call the subprocedure
+call MakeDataFile(outputFile,sqlstr,sqlfile)
+
+' Close
+set fso = Nothing
+conn.close
+set conn = Nothing
+Set WshShell0 = Nothing
+
+
+'You're all done!!  Enjoy the file created.
+'msgbox("Internet Explorer will be opened, Please allow IE to running script firstly")
+'wscript.Quit
+
+'########## Created file HTML #############
+Dim FSO1,AFileStream,SrcData,h,e,i,f,splitFile,RowData
+
+Set FSO1 = CreateObject("Scripting.FileSystemObject")
+Set AFileStream = FSO1.CreateTextFile(HtmlFile,true)
+ h= FSO1.OpenTextFile(HeadingFile).ReadAll
+ e= FSO1.OpenTextFile(EndingFile).ReadAll
+ 
+	AFileStream.WriteLine h 
+	AFileStream.WriteLine ""
+
+    i = 0
+	Set f = FSO1.OpenTextFile(outputFile)
+	Do Until f.AtEndOfStream
+	  'WScript.Echo f.ReadLine
+	  'AFileStream.WriteLine f.ReadLine
+	  RowData = f.ReadLine
+      splitFile = Split(RowData,"|")
+		AFileStream.WriteLine	"<tr class="& """" & "smallGrey" & """" & " bgcolor=" & """" & "#FF0000" & """" & ">"
+
+		  If i = 0 Then
+			'Checked radio button at first data
+			i=1
+			'AFileStream.WriteLine "<td width=" & """" & "3%" & """" & " bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """><input type=" & """" & "radio" & """" & " name=" & """" & "TT" & """" & " checked value=" & """" & RowData & """></td>"
+			AFileStream.WriteLine "<td width=" & """" & "3%" & """" & " bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """><input type=" & """" & "radio" & """" & " name=" & """" & "TT" & """" & " checked value=" & """" & splitFile(0) & "|" & outputFile & """></td>"
+		 else
+			'AFileStream.WriteLine "<td width=" & """" & "3%" & """" & " bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """><input type=" & """" & "radio" & """" & " name=" & """" & "TT" & """" & " value=" & """" & RowData & """></td>"
+			AFileStream.WriteLine "<td width=" & """" & "3%" & """" & " bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """><input type=" & """" & "radio" & """" & " name=" & """" & "TT" & """" & " value=" & """" & splitFile(0) & "|" & outputFile & """></td>"
+		  End If
+
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(0) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(1) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(2) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(3) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(4) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(5) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(6) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(7) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(8) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(9) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(10) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(11) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(12) & "</strong></td>"
+		AFileStream.WriteLine "<td bgcolor=" & """" & "#CCCCCC" & """" & " align=" & """" & "center" & """" & "><strong>" & splitFile(13) & "</strong></td>"
+		AFileStream.WriteLine "</tr>"
+		
+
+	Loop
+
+	f.Close
+    
+
+	AFileStream.WriteLine ""
+	AFileStream.WriteLine e
+	AFileStream.close
+
+Set AFileStream = Nothing
+Set FSO1 = Nothing 
+
+
+'################ Open Web, Using only IE!!! ###################
+Dim IE, MyDocument, WshShell, path, iHeight, iWidth
+
+
+With Createobject("internetexplorer.application")
+.navigate "about:blank"
+With .document.parentWindow.screen
+iHeight = .height
+iWidth = .width
+End With
+End With
+
+Set IE = CreateObject("InternetExplorer.Application")
+IE.Visible = True
+IE.menubar = 1
+IE.toolbar = 0
+IE.statusbar = 0
+IE.Top = 0
+IE.Left = 0
+IE.Width = iWidth
+IE.Height = iHeight - 28
+IE.Navigate HtmlFile
+'While IE.ReadyState <> 4 : WScript.Sleep 100 : Wend
+'IE.document.focus()
+'set IE = nothing 
+
+Do While IE.Busy : WScript.Sleep 100 : Loop
+CreateObject("WScript.Shell").AppActivate IE.document.title
+IE.Visible = True
+set IE = nothing
+
+'####### Closing IE ########
+'WScript.Sleep 5000
+'MsgBox "rek"
+'IE.Document.Close
+'IE.Quit
+
+
+'########## Functions ###############
+Function GetIPAddresses()
+	Dim myIPAddress : myIPAddress = ""
+	Dim objWMIService : Set objWMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+	Dim colAdapters : Set colAdapters = objWMIService.ExecQuery("Select IPAddress from Win32_NetworkAdapterConfiguration Where IPEnabled = True")
+	Dim objAdapter
+	For Each objAdapter in colAdapters
+	  If Not IsNull(objAdapter.IPAddress) Then myIPAddress = trim(objAdapter.IPAddress(0))
+	  exit for
+	Next
+	  GetIPAddresses = myIPAddress
+End Function
+
+Function DateConversion(parDate)
+	Dim str_dd : str_dd = Split(parDate,"/")(1)
+	Dim str_mm : str_mm = Split(parDate,"/")(0)
+	Dim str_yy : str_yy = Split(Split(parDate,"/")(2)," ")(0)
+	Dim str_time : str_time = Split(parDate," ")(1)
+	Dim Curr_Year : Curr_Year = (Mid(Year(Date),1,2) & str_yy) + 543
+	if len(str_dd)= 1 then
+		str_dd = "0" & str_dd
+	end if
+	if len(str_mm) = 1 then
+		str_mm = "0" & str_mm
+	end if
+	DateConversion = str_mm  & "/" & str_dd  & "/" & Curr_Year & " " & str_time	
+End Function
+
+Function DelFile(FileRemove)
+	Dim DelShell : Set DelShell = WScript.CreateObject("WScript.Shell")
+	Dim strCommandLine : strCommandLine = DelFileCommand & " " & FileRemove
+	DelShell.Run(strCommandLine),0,True
+	Set DelShell = Nothing 
+End Function
+
+

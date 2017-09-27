@@ -1,0 +1,30 @@
+TT14-693189
+JB14-657910
+20-NOV-14
+31-DEC-14
+None
+Accept
+21-NOV-14
+MRETM-3G2100 Zone RET
+MRETM(3RNCKKN5Z,3MSSKKN1Z)
+MRETM(3RNCKKN5Z,3MSSKKN1Z),MRET(BSC-RET2H,MSC-KKN1)
+Suttiphong Klaychaiyaphum
+0 4427 6790 ext 115, 0818327431
+monchai kraikran
+043-525161, 0818362054
+
+
+
+
+
+
+
+
+
+
+
+192.56.9.204|niponphu|10/18/2557 16:10:58|C713910492|Minor|2902 PCM LINE REMOTE END ALARM|Nokia|YYNN|MGWSNI5N_MPCM-124|CombindTT|FAULT|Unknow|MGWSNI5N|TT14-633155|Send.Failed|NKgsm2902
+
+echo "${ip}|${uname}|${adate}|C${alm}|${aser}|${desc}|${vendor}|${system}|${amo}|CombindTT|FAULT|${strsite}|${ext1}|${TTNo}|${ttid}|${aname}" >>${Tpath}/Log/${uname}.log
+
+"IP|netx|${adate}|C${alm}|${aser}|${desc}|${vendor}|${system}|${amo}|CombindTT|FAULT|${strsite}|${ext1}|${TTNo}|splitFile(0)|${aname}" >>${Tpath}/Log/${uname}.log

@@ -1,0 +1,40 @@
+192.56.9.204 ** Find from vbscript x
+niponphu *User Name* x
+11/23/2557 01:03:28 **ReFomat Date Updated** x
+C730878056  **Adding prefix C + AlertId** x
+Critical *Severity* x
+00830000_DEST_PATH:/centralizedlog/udr/CWDC can not access please check (ref id 4167751) * x
+Misc **Hard code** x
+YYYY **Hard code** x
+sipssf402_udr_centralizedlog-/ *AMO* x
+CombindTT **Hard Code** x
+FAULT **Hard Code** x
+Unknow **Site ** x
+sipssf402 *Col1* x
+TT14-697174 **Getting from web** x
+Unknow **JOB**
+VOIP_00830000 *AletName*
+
+
+############## 
+10.216.148.202|netx|1416645637|C730808743|Critical|7404 RECT MODULE FAIL [Active>15min] with AC fail|VENDOR|YYYY|BSC13KRI_BDJD1|CombindTT|FAULT|Unknow|BSC13KRI|TT14-696922|Unknow|ExtRectModuleFail
+192.56.9.204|niponphu|11/23/2557 01:03:28|C730878056|Critical|00830000_DEST_PATH:/centralizedlog/udr/CWDC can not access please check (ref id 4167751)|Misc|YYYY|sipssf402_udr_centralizedlog-/|CombindTT|FAULT|Unknow|sipssf402|TT14-697174|Unknow|VOIP_00830000
+
+Menu.AlertManagement
+    Label: CombineTT-WebAccess
+    UnixCommand:
+    Win32Command: c:\CFMS\CombineTT\CombineTT.bat "${USER_NAME}|${ALERT_ID}|${DATE_UPDATED} ${TIME_UPDATED}|${ALERT_NAME}|${SEVERITY}|${AMO_NAME}|
+    ${DESCRIPTION}|${strSite}|${strExtendCol1}|ZZZZ|${MANAGER_CLASS}"
+    URL:
+    MultipleAlerts: false
+
+
+########'Oded'###############
+if( "$TTID" == "" ) then  'From Alert Navigator
+        set TTID="Unknow"
+endif
+echo "${cur_ps}|${timeStamp}|${uname}|${almid}|${aDate}|${aname}|${aseverity}|${amo}|${desc}|${strsite}|${strExt1}|${TTID}|${IP}|${Mclass}" >
+> ${Spath}/Log/${uname}.log
+
+##########'TM server'##########
+"${ip}|${uname}|${adate}|C${alm}|${aser}|${desc}|${vendor}|${system}|${amo}|CombindTT|FAULT|${strsite}|${ext1}|${TTNo}|${ttid}|${aname}" >> ${Tpath}/Log/${uname}.log

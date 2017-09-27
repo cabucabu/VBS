@@ -1,0 +1,1 @@
+prawitaa|1123920819|6/2/17 12:08:59|INC100_AssociateFail|Major|MGKM_C-NodREG_A10-R1_SHELF|Association Failed / MGKM_C-NodREG_A10-R1 MGKM_C-NodREG_A10-R1|MGKM|INC100_BKK_CN2||sdhINC100FaultManager

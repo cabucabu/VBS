@@ -1,0 +1,4 @@
+<WebCombineTTWindows>
+CombineTTWindows|10.235.6.200|sittichs|6/7/17 23:22:58|C1126530047|Major|VASO , Mount point /NAS_SFF usage 80% (limit=80%)|Misc|YYYYYYY|point_cwdc:CWDC_DiskUsage_/NAS_SFF|CombindTT|FAULT|null|point_cwdc:CWDC|TT17-0634544|Unknow|HardwareDiskOverUsage|0
+CombineTTWindows|10.235.6.200|sittichs|6/7/17 23:24:38|C1126530454|Major|VASO , Mount point /NAS_SFF usage 80% (limit=80%)|Misc|YYYYYYY|point_suk:SUK_DiskUsage_/NAS_SFF|CombindTT|FAULT|null|point_suk:SUK|TT17-0634544|Unknow|HardwareDiskOverUsage|0
+sittichs</WebCombineTTWindows>

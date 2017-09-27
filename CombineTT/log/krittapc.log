@@ -1,0 +1,4 @@
+<WebCombineTTWindows>
+CombineTTWindows|10.235.4.196|krittapc|8/30/16 18:40:03|C1013208438|Warning|LOG WARNING: SMS Log not updated|Misc|YYYYYYY|PFYUCPM801G_CPM1|CombindTT|FAULT|null|PFYUCPM801G_CPM1|TT16-725233|Unknow|NetAd_SMS_Log|0
+CombineTTWindows|10.235.4.196|krittapc|8/30/16 18:40:03|C1013208439|Warning|LOG WARNING: NetAd_Web Log not Updated|Misc|YYYYYYY|PFYUWEB802G_WEB2|CombindTT|FAULT|null|PFYUWEB802G_WEB2|TT16-725233|Unknow|NetAd_Web_Log|0
+krittapc</WebCombineTTWindows>

@@ -1,0 +1,57 @@
+		</table></td>
+	 </tr>
+</form>
+	 <!-- ######## Control Script ######### -->	 
+<FORM NAME="Form1">
+	<div align="left">
+   			  <INPUT TYPE="Button" NAME="Button1" VALUE="Submit" class="system_button_normal" onclick="CheckedRadio()">
+			  <!--tr class="smallred1"><strong>  Please allow IE to running script firstly</strong></tr-->
+			  <!--INPUT TYPE="Button" NAME="Button2" VALUE="Cancel" class="system_button_normal"-->	
+			  
+	</div>
+  <!-- SCRIPT FOR="Button1" EVENT="onClick" LANGUAGE="VBScript">
+			For Each button in Document.AutoTT.TT
+				If button.Checked Then 
+					value = button.value
+					MsgBox value
+					objExplorer.Quit
+					exit For
+				end If
+			Next
+  </SCRIPT-->
+
+  <script type="text/vbscript" lannguage="VBScript">
+		Sub SendFiletoTTS(tt)
+				Dim wshShell
+				Set wshShell = CreateObject("WScript.Shell")
+				WshShell.Run "C:\CFMS\CombineTT\SendFile2TT.vbs " & tt,0,true	
+				Set WshShell = Nothing
+				'MsgBox "rek1"
+				Call closeWindow
+		End Sub
+  </script>
+  <script type="text/javascript">
+			function closeWindow() {
+				//window.open('','_parent','');
+				//window.close();
+				window.open("", "_self").close();
+			}
+			function CheckedRadio() {
+					  var tt = document.getElementsByName('TT');
+					  //var ischecked_method = false;
+					for ( var i = 0; i < tt.length; i++) {
+						if(tt[i].checked) {							
+							//alert(tt[i].value);
+							SendFiletoTTS(tt[i].value);													
+							break;
+
+						}
+					}				
+			}
+</script> 
+
+</FORM>
+
+
+ </BODY>
+</HTML>

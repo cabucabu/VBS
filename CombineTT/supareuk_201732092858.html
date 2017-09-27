@@ -1,0 +1,498 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>CFMS:Combine TT</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<script  language="javascript">
+	function closeMe()
+	{
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var userName = document.getElementById("uname").value;
+		var f = fso.GetFolder("C:\\CFMS\\CombineTT\\alarms\\" + userName); 
+		var FSo = new Enumerator(f.Files);
+		for (i=0;!FSo.atEnd();FSo.moveNext()) {
+			var f = fso.GetFile("C:\\CFMS\\CombineTT\\alarms\\" + userName + "\\" + FSo.item().name);
+			f.Delete();
+		}
+		var nameHtml = window.location.href.replace("file:///", "");
+		var thisFile = fso.GetFile(nameHtml);
+		thisFile.Delete();
+
+		window.open('', '_self', '');;
+		window.close();
+	}
+	function ChSend(){
+		var j=0;
+		var tno = document.getElementById("txtTTno").value;
+		var output = document.getElementById("result").value;
+		var splitStr = output.split("#");
+		var outputSplit = splitStr[1].split("|");
+		for(i=0; i < outputSplit.length; i++){
+			if (document.getElementById(outputSplit[i]).checked == true) {
+				j=j+1;
+			}
+		}
+
+		if(tno.length < 11) {
+			alert("Please input TT Number before");
+		} else if (j==0) {
+			alert("Please select alarm Before");
+		} else {
+			var fileName = splitStr[0] + ".log";
+			var objX = new ActiveXObject("Scripting.FileSystemObject");
+			var fo = objX.GetFolder("C:\\CFMS\\CombineTT\\log");
+			var newfile = fo.CreateTextFile(fileName, true); 
+			var ttNumber = document.getElementById("txtTTno").value;
+			newfile.writeline('<WebCombineTTWindows>');
+			for(i=0; i < outputSplit.length; i++){
+				if (document.getElementById(outputSplit[i]).checked == true) {
+					var rawData = document.getElementById(outputSplit[i]).value;
+					var dataSplit = rawData.split("|");
+					//var currentdate = new Date();
+					//var datetime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+					var code = "";
+					//window.alert(rawData);
+					if(rawData.search("3G2100")>0){
+						code = "32";
+					}else if(rawData.search("4G1800")>0){
+						code = "64";
+					}else if(rawData.search("4G")>0){
+						code = "64";
+					}else if(rawData.search("4G2100")>0){
+						code = "64";
+					}else if(rawData.search("2G900")>0){
+						code = "8";
+					}else if(rawData.search("GSM900")>0){
+						code = "8";
+					}else if(rawData.search("3G900")>0){
+						code = "16";
+					}else{
+						code = "0";
+					}
+
+					var data = "CombineTTWindows|" + (dataSplit[11] != "" ? dataSplit[11] : "null") + "|" + (dataSplit[0] != "" ? dataSplit[0] : "null") + "|" + (dataSplit[2] != "" ? dataSplit[2] : "null") + "|" + (dataSplit[1] != "" ? "C" + dataSplit[1] : "null") + "|" + (dataSplit[4] != "" ? dataSplit[4] : "null") + "|" + (dataSplit[6] != "" ? dataSplit[6] : "null") + "|Misc|YYYYYYY|" + (dataSplit[5] != "" ? dataSplit[5] : "null") + "|CombindTT|FAULT|" + (dataSplit[7] != "" ? dataSplit[7] : "null") + "|" + (dataSplit[8] != "" ? dataSplit[8] : "null") + "|" + ttNumber + "|" + (dataSplit[9] != "" ? dataSplit[9] : "Unknow") + "|" + (dataSplit[3] != "" ? dataSplit[3] : "null") + "|" + code;
+					newfile.writeline(data);
+				}
+			}
+			var footTag = dataSplit[0]+"\<\/WebCombineTTWindows\>";
+			newfile.writeline(footTag);
+			newfile.Close();
+			//window.alert('C:\\CFMS\\CombineTT\\SendCombineTT.vbs');
+			var objShell = new ActiveXObject("WScript.shell");
+			var textSend = "C:\\CFMS\\CombineTT\\SendCombineTT.vbs"+" "+splitStr[0]
+			objShell.run(textSend);
+		}
+		window.close();
+	}
+	window.onbeforeunload=function(){
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var userName = document.getElementById("uname").value;
+		var f = fso.GetFolder("C:\\CFMS\\CombineTT\\alarms\\" + userName); 
+		var FSo = new Enumerator(f.Files);
+		for (i=0;!FSo.atEnd();FSo.moveNext()) {
+			var f = fso.GetFile("C:\\CFMS\\CombineTT\\alarms\\" + userName + "\\" + FSo.item().name);
+			f.Delete();
+		}
+		var nameHtml = window.location.href.replace("file:///", "");
+		var thisFile = fso.GetFile(nameHtml);
+		thisFile.Delete();
+	}
+</script>
+
+<body>
+<table width="750" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="150" background="imgs/title.jpg">&nbsp;</td>
+  </tr>
+  <tr>
+    <td bgcolor="#BAD74B" class="smallwhite"><strong class="smallBlack">User Name : supareuk</strong></td>
+  </tr>
+  <tr>
+    <td><form id="form1" name="form1" method="post" action="sendComp.php">
+      <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td><table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="14%">&nbsp;</td>
+              <td width="28%">&nbsp;</td>
+              <td width="58%">&nbsp;</td>
+            </tr>
+            <tr>
+				<td>
+					<strong class="smallBlack">TT Number : </strong>
+				</td>
+				<td>
+					<input name="txtTTno" type="text" class="system_input_left" id="txtTTno" value="TT17-" maxlength="12" />
+					<input name="SendTT" type="hidden" id="SendTT" />
+				</td>
+				<td>
+					<input name="uname" type="hidden" id="uname" value="supareuk" />
+					<input name="BSend" type="button" class="system_button_normal" id="BSend" value="Send" onclick="ChSend();"/>
+					<input name="BCancel" type="button" class="system_button_normal" id="BCancel" value="Cancel" onclick="closeMe();"/>
+				</td>
+            </tr>
+            
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#97B22D">
+              <tr class="smallwhite">
+                <td width="4%" bgcolor="#779525"></td>
+                <td bgcolor="#779525"><strong>AlertID</strong></td>
+                <td bgcolor="#779525"><strong>AlertName</strong></td>
+                <td bgcolor="#779525"><strong>Severity</strong></td>
+                <td bgcolor="#779525"><strong>AMO</strong></td>
+                <td bgcolor="#779525"><strong>Description</strong></td>
+                <td bgcolor="#779525"><strong>StrSite</strong></td>
+              </tr>
+
+
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564001" checked value="supareuk|1088564001|3/20/17 09:28:36|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2152|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564001</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2152</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564009" checked value="supareuk|1088564009|3/20/17 09:28:36|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2141|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564009</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2141</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564013" checked value="supareuk|1088564013|3/20/17 09:28:36|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2142|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564013</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2142</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564014" checked value="supareuk|1088564014|3/20/17 09:28:37|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2151|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564014</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2151</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564017" checked value="supareuk|1088564017|3/20/17 09:28:37|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2152|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564017</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2152</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564019" checked value="supareuk|1088564019|3/20/17 09:28:37|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2131|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564019</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2131</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564025" checked value="supareuk|1088564025|3/20/17 09:28:38|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2132|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564025</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2132</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564027" checked value="supareuk|1088564027|3/20/17 09:28:38|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2143|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564027</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2143</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564029" checked value="supareuk|1088564029|3/20/17 09:28:38|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2153|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564029</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2153</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564032" checked value="supareuk|1088564032|3/20/17 09:28:39|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_TBNPM_TSAKND2133|Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117|TSAKN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564032</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_TBNPM_TSAKND2133</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: TBNPM_D1-DHRKKN0117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>TSAKN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564035" checked value="supareuk|1088564035|3/20/17 09:28:39|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD214A|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564035</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD214A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564038" checked value="supareuk|1088564038|3/20/17 09:28:39|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD213A|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564038</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD213A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564041" checked value="supareuk|1088564041|3/20/17 09:28:40|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD213B|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564041</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD213B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564051" checked value="supareuk|1088564051|3/20/17 09:28:41|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD214B|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564051</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD214B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564053" checked value="supareuk|1088564053|3/20/17 09:28:41|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD215A|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564053</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD215A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564056" checked value="supareuk|1088564056|3/20/17 09:28:42|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD215B|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564056</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD215B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564058" checked value="supareuk|1088564058|3/20/17 09:28:42|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD214C|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564058</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD214C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564065" checked value="supareuk|1088564065|3/20/17 09:28:42|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD213C|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564065</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD213C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564071" checked value="supareuk|1088564071|3/20/17 09:28:43|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KHSKM_KSKHTD215C|Cell is out of service, Site Name: KHSKM|KSKHT|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564071</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KHSKM_KSKHTD215C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KHSKM</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSKHT</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564076" checked value="supareuk|1088564076|3/20/17 09:28:43|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD213A|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564076</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD213A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564082" checked value="supareuk|1088564082|3/20/17 09:28:43|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD213B|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564082</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD213B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564091" checked value="supareuk|1088564091|3/20/17 09:28:44|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD214A|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564091</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD214A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564098" checked value="supareuk|1088564098|3/20/17 09:28:44|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD215A|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564098</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD215A</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564105" checked value="supareuk|1088564105|3/20/17 09:28:44|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD213C|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564105</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD213C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564117" checked value="supareuk|1088564117|3/20/17 09:28:45|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD214C|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564117</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD214C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564110" checked value="supareuk|1088564110|3/20/17 09:28:45|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD214B|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564110</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD214B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564125" checked value="supareuk|1088564125|3/20/17 09:28:46|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD215B|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564125</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD215B</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088564130" checked value="supareuk|1088564130|3/20/17 09:28:46|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_SSSMN_KSBKKD215C|Cell is out of service, Site Name: SSSMN|KSBKK|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088564130</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_SSSMN_KSBKKD215C</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: SSSMN</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>KSBKK</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563973" checked value="supareuk|1088563973|3/20/17 09:28:33|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2142|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563973</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2142</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563977" checked value="supareuk|1088563977|3/20/17 09:28:33|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2143|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563977</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2143</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563970" checked value="supareuk|1088563970|3/20/17 09:28:33|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2141|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563970</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2141</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563983" checked value="supareuk|1088563983|3/20/17 09:28:34|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2153|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563983</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2153</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563987" checked value="supareuk|1088563987|3/20/17 09:28:34|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2131|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563987</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2131</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563980" checked value="supareuk|1088563980|3/20/17 09:28:34|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2151|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563980</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2151</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563991" checked value="supareuk|1088563991|3/20/17 09:28:35|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2132|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563991</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2132</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1088563994" checked value="supareuk|1088563994|3/20/17 09:28:35|ZTE3G2100_RAN_199083022|Critical|3RNCKKN16Z_KNSKK_NPGTND2133|Cell is out of service, Site Name: KNSKK|NPGTN|3RNCKKN16Z||3G2100ZTEFaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1088563994</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ZTE3G2100_RAN_199083022</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>3RNCKKN16Z_KNSKK_NPGTND2133</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Cell is out of service, Site Name: KNSKK</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>NPGTN</strong></td>
+</tr>
+<tr>
+<td input type="hidden" name="result" id="result" value="supareuk#1088564001|1088564009|1088564013|1088564014|1088564017|1088564019|1088564025|1088564027|1088564029|1088564032|1088564035|1088564038|1088564041|1088564051|1088564053|1088564056|1088564058|1088564065|1088564071|1088564076|1088564082|1088564091|1088564098|1088564105|1088564117|1088564110|1088564125|1088564130|1088563973|1088563977|1088563970|1088563983|1088563987|1088563980|1088563991|1088563994"></td>
+</tr>
+
+		</table></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+        </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+

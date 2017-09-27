@@ -1,0 +1,1 @@
+del c:\CFMS\Auto_TTS\%1

@@ -1,0 +1,10 @@
+<WebCombineTTWindows>
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 20:38:37|C1122799327|Warning|DISK WARNING - free space: /centralizedlog 107404 MB (20% inode=90%):|Misc|YYYYYYY|B2CSCF802_Disk_Usage|CombindTT|FAULT|null|B2CSCF802|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 21:34:38|C1122810459|Warning|DISK WARNING - free space: /centralizedlog 106207 MB (20% inode=90%):|Misc|YYYYYYY|B2CSSF802_Disk_Usage|CombindTT|FAULT|null|B2CSSF802|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 21:24:17|C1122808460|Warning|DISK WARNING - free space: /centralizedlog 106340 MB (20% inode=90%):|Misc|YYYYYYY|B2CSRFP802_Disk_Usage|CombindTT|FAULT|null|B2CSRFP802|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 21:24:21|C1122808470|Warning|DISK WARNING - free space: /centralizedlog 106340 MB (20% inode=90%):|Misc|YYYYYYY|B2CSCF801_Disk_Usage|CombindTT|FAULT|null|B2CSCF801|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 21:34:38|C1122810492|Warning|DISK WARNING - free space: /centralizedlog 106207 MB (20% inode=90%):|Misc|YYYYYYY|B2CSRFC802_Disk_Usage|CombindTT|FAULT|null|B2CSRFC802|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 21:30:25|C1122809628|Warning|DISK WARNING - free space: /centralizedlog 106308 MB (20% inode=90%):|Misc|YYYYYYY|B2CSRFP801_Disk_Usage|CombindTT|FAULT|null|B2CSRFP801|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 20:36:43|C1122798733|Warning|DISK WARNING - free space: /centralizedlog 107420 MB (20% inode=90%):|Misc|YYYYYYY|B2CSSF801_Disk_Usage|CombindTT|FAULT|null|B2CSSF801|TT17-0516830|Unknow|nagDisk|0
+CombineTTWindows|10.235.6.200|watchalp|5/30/17 20:36:47|C1122798745|Warning|DISK WARNING - free space: /centralizedlog 107405 MB (20% inode=90%):|Misc|YYYYYYY|B2CSRFC801_Disk_Usage|CombindTT|FAULT|null|B2CSRFC801|TT17-0516830|Unknow|nagDisk|0
+watchalp</WebCombineTTWindows>

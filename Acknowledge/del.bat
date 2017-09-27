@@ -1,0 +1,1 @@
+del c:\CFMS\Acknowledge\%1

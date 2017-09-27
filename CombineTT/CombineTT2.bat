@@ -1,0 +1,1 @@
+c:\CFMS\CombineTT\WriteCombineTT.vbs %1

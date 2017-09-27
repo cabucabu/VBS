@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>CFMS:Combine TT</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<script  language="javascript">
+	function closeMe()
+	{
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var userName = document.getElementById("uname").value;
+		var f = fso.GetFolder("C:\\CFMS\\CombineTT\\alarms\\" + userName); 
+		var FSo = new Enumerator(f.Files);
+		for (i=0;!FSo.atEnd();FSo.moveNext()) {
+			var f = fso.GetFile("C:\\CFMS\\CombineTT\\alarms\\" + userName + "\\" + FSo.item().name);
+			f.Delete();
+		}
+		var nameHtml = window.location.href.replace("file:///", "");
+		var thisFile = fso.GetFile(nameHtml);
+		thisFile.Delete();
+
+		window.open('', '_self', '');;
+		window.close();
+	}
+	function ChSend(){
+		var j=0;
+		var tno = document.getElementById("txtTTno").value;
+		var output = document.getElementById("result").value;
+		var splitStr = output.split("#");
+		var outputSplit = splitStr[1].split("|");
+		for(i=0; i < outputSplit.length; i++){
+			if (document.getElementById(outputSplit[i]).checked == true) {
+				j=j+1;
+			}
+		}
+
+		if(tno.length < 11) {
+			alert("Please input TT Number before");
+		} else if (j==0) {
+			alert("Please select alarm Before");
+		} else {
+			var fileName = splitStr[0] + ".log";
+			var objX = new ActiveXObject("Scripting.FileSystemObject");
+			var fo = objX.GetFolder("C:\\CFMS\\CombineTT\\log");
+			var newfile = fo.CreateTextFile(fileName, true); 
+			var ttNumber = document.getElementById("txtTTno").value;
+			newfile.writeline('<WebCombineTTWindows>');
+			for(i=0; i < outputSplit.length; i++){
+				if (document.getElementById(outputSplit[i]).checked == true) {
+					var rawData = document.getElementById(outputSplit[i]).value;
+					var dataSplit = rawData.split("|");
+					//var currentdate = new Date();
+					//var datetime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+					var code = "";
+					//window.alert(rawData);
+					if(rawData.search("3G2100")>0){
+						code = "32";
+					}else if(rawData.search("4G1800")>0){
+						code = "64";
+					}else if(rawData.search("4G")>0){
+						code = "64";
+					}else if(rawData.search("4G2100")>0){
+						code = "64";
+					}else if(rawData.search("2G900")>0){
+						code = "8";
+					}else if(rawData.search("GSM900")>0){
+						code = "8";
+					}else if(rawData.search("3G900")>0){
+						code = "16";
+					}else{
+						code = "0";
+					}
+
+					var data = "CombineTTWindows|" + (dataSplit[11] != "" ? dataSplit[11] : "null") + "|" + (dataSplit[0] != "" ? dataSplit[0] : "null") + "|" + (dataSplit[2] != "" ? dataSplit[2] : "null") + "|" + (dataSplit[1] != "" ? "C" + dataSplit[1] : "null") + "|" + (dataSplit[4] != "" ? dataSplit[4] : "null") + "|" + (dataSplit[6] != "" ? dataSplit[6] : "null") + "|Misc|YYYYYYY|" + (dataSplit[5] != "" ? dataSplit[5] : "null") + "|CombindTT|FAULT|" + (dataSplit[7] != "" ? dataSplit[7] : "null") + "|" + (dataSplit[8] != "" ? dataSplit[8] : "null") + "|" + ttNumber + "|" + (dataSplit[9] != "" ? dataSplit[9] : "Unknow") + "|" + (dataSplit[3] != "" ? dataSplit[3] : "null") + "|" + code;
+					newfile.writeline(data);
+				}
+			}
+			var footTag = dataSplit[0]+"\<\/WebCombineTTWindows\>";
+			newfile.writeline(footTag);
+			newfile.Close();
+			//window.alert('C:\\CFMS\\CombineTT\\SendCombineTT.vbs');
+			var objShell = new ActiveXObject("WScript.shell");
+			var textSend = "C:\\CFMS\\CombineTT\\SendCombineTT.vbs"+" "+splitStr[0]
+			objShell.run(textSend);
+		}
+		window.close();
+	}
+	window.onbeforeunload=function(){
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var userName = document.getElementById("uname").value;
+		var f = fso.GetFolder("C:\\CFMS\\CombineTT\\alarms\\" + userName); 
+		var FSo = new Enumerator(f.Files);
+		for (i=0;!FSo.atEnd();FSo.moveNext()) {
+			var f = fso.GetFile("C:\\CFMS\\CombineTT\\alarms\\" + userName + "\\" + FSo.item().name);
+			f.Delete();
+		}
+		var nameHtml = window.location.href.replace("file:///", "");
+		var thisFile = fso.GetFile(nameHtml);
+		thisFile.Delete();
+	}
+</script>
+
+<body>
+<table width="750" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="150" background="imgs/title.jpg">&nbsp;</td>
+  </tr>
+  <tr>
+    <td bgcolor="#BAD74B" class="smallwhite"><strong class="smallBlack">User Name : prawitaa</strong></td>
+  </tr>
+  <tr>
+    <td><form id="form1" name="form1" method="post" action="sendComp.php">
+      <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td><table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="14%">&nbsp;</td>
+              <td width="28%">&nbsp;</td>
+              <td width="58%">&nbsp;</td>
+            </tr>
+            <tr>
+				<td>
+					<strong class="smallBlack">TT Number : </strong>
+				</td>
+				<td>
+					<input name="txtTTno" type="text" class="system_input_left" id="txtTTno" value="TT17-" maxlength="12" />
+					<input name="SendTT" type="hidden" id="SendTT" />
+				</td>
+				<td>
+					<input name="uname" type="hidden" id="uname" value="prawitaa" />
+					<input name="BSend" type="button" class="system_button_normal" id="BSend" value="Send" onclick="ChSend();"/>
+					<input name="BCancel" type="button" class="system_button_normal" id="BCancel" value="Cancel" onclick="closeMe();"/>
+				</td>
+            </tr>
+            
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td><table width="100%" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#97B22D">
+              <tr class="smallwhite">
+                <td width="4%" bgcolor="#779525"></td>
+                <td bgcolor="#779525"><strong>AlertID</strong></td>
+                <td bgcolor="#779525"><strong>AlertName</strong></td>
+                <td bgcolor="#779525"><strong>Severity</strong></td>
+                <td bgcolor="#779525"><strong>AMO</strong></td>
+                <td bgcolor="#779525"><strong>Description</strong></td>
+                <td bgcolor="#779525"><strong>StrSite</strong></td>
+              </tr>
+
+
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1121552060" checked value="prawitaa|1121552060|5/28/17 02:21:40|GatewayFault|Critical|INC100_BKK_CN3_GatewayFault|(28-05-17 02:21) Gateway start failed||CFMS-ADMIN||sdhINC100FaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1121552060</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>GatewayFault</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>INC100_BKK_CN3_GatewayFault</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>(28-05-17 02:21) Gateway start failed</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong></strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1123961060" checked value="prawitaa|1123961060|6/2/17 13:51:53|ArchiveNotUpdate|Critical|INC100_BKK_CN4_ArchiveNotUpdate|(02-06-17 13:51) Archive file last update 12:46 (now 13:51 delay 65 Min.) [INC100_BKK_CN4]||CFMS-ADMIN||sdhINC100FaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1123961060</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ArchiveNotUpdate</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>INC100_BKK_CN4_ArchiveNotUpdate</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>(02-06-17 13:51) Archive file last update 12:46 (now 13:51 delay 65 Min.) [INC100_BKK_CN4]</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong></strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1116115522" checked value="prawitaa|1116115522|5/17/17 12:25:33|INC100_RDI|Critical|RST-N-T-U2_SINF16F-1-3-4-1|MS-RDI / RST-N-T-U2 WCLM#NBD-RST-U6-01-NTU8-1 SINF16F-1-3-4-1|RST|INC100_BKK_TRNK2|TT17-0406192|sdhINC100FaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1116115522</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>INC100_RDI</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>RST-N-T-U2_SINF16F-1-3-4-1</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>MS-RDI / RST-N-T-U2 WCLM#NBD-RST-U6-01-NTU8-1 SINF16F-1-3-4-1</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>RST</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1116115524" checked value="prawitaa|1116115524|5/17/17 12:25:33|INC100_LOF|Critical|WCLM-NBD-N-T-U4_SINF16F-1-3-5-1|LOF / WCLM-NBD-N-T-U4 WCLM#NBD-RST-U6-01-NTU8-1 SINF16F-1-3-5-1|WCLM|INC100_BKK_TRNK2|TT17-0516357|sdhINC100FaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1116115524</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>INC100_LOF</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>WCLM-NBD-N-T-U4_SINF16F-1-3-5-1</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>LOF / WCLM-NBD-N-T-U4 WCLM#NBD-RST-U6-01-NTU8-1 SINF16F-1-3-5-1</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>WCLM</strong></td>
+</tr>
+<tr class="smallGrey" bgcolor="#FF0000">
+<td width="3%" bgcolor="#CCCCCC" align="center"><input type="checkbox" id="1123849987" checked value="prawitaa|1123849987|6/2/17 09:23:37|INC100_ServerTestFail|Critical|ONT_G1-03_IPTS_SHELF|HKA / ONT_G1-03_IPTS NEC-TEST-SVRTRNK2 HKA_PORT-1||INC100_BKK_TRNK2|Ack(Activity)|sdhINC100FaultManager|10.235.6.200"></td>
+<td bgcolor="#CCCCCC" align="center"><strong>1123849987</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>INC100_ServerTestFail</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>Critical</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>ONT_G1-03_IPTS_SHELF</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong>HKA / ONT_G1-03_IPTS NEC-TEST-SVRTRNK2 HKA_PORT-1</strong></td>
+<td bgcolor="#CCCCCC" align="center"><strong></strong></td>
+</tr>
+<tr>
+<td input type="hidden" name="result" id="result" value="prawitaa#1121552060|1123961060|1116115522|1116115524|1123849987"></td>
+</tr>
+
+		</table></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+        </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+

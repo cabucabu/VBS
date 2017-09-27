@@ -1,0 +1,76 @@
+<html>
+ <head>
+    <title>Calling Web Service from jQuery</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="json2.js"></script>
+
+    <script type="text/javascript">
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+      $(document).ready(function () {
+		var dataAMO = $.urlParam('AMO');
+		var dataAlertName = $.urlParam('alertName');
+       $.ajax({
+                type: "GET",
+                url: "http://10.208.152.22:8180/CFMSWebService/rest/getRelateAlarm",
+                data: { AMO: dataAMO, alertName: dataAlertName }, 
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+				var myObj = JSON.parse(data);
+				var arrayLength = myObj.alertFromSiteDto.length;
+					for (var i = 0; i < arrayLength; i++) {
+						var rowData = myObj.alertFromSiteDto[i];
+						var row = "<tr>";
+						row+="<td>"+rowData.object+"</td>";
+						row+="<td>"+rowData.alertName+"</td>";
+						row+="<td>"+rowData.desc+"</td>";
+						row+="</tr>";
+						$("#table1").append(row);
+					}
+                }
+            });
+		});
+    </script>
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+    font-family: "Tahoma";
+	font-size: 12px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+</style>
+
+</head>
+<body>
+
+
+<table id="table1">
+    <tr>
+	<th>OBJECT</th>
+	<th>ALERTNAME</th>
+	<th>DESCRIPTION</th>
+   </tr>
+</table>
+
+
+
+</body>
+</html>

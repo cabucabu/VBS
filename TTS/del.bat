@@ -1,0 +1,1 @@
+del c:\CFMS\TTS\%1
